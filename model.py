@@ -41,21 +41,23 @@ class ForestModel(mesa.Model):
     def _init_landscape(self):
         """
         Assigns each grid cell a type: 'forest', 'logged', or 'reserve'.
-        Roughly matches Grimsö: ~85% of forest area under conventional
-        management, ~15% protected reserve. Within the managed portion,
-        forestry_intensity controls what fraction is actively logged
-        at any given time.
+        Reserve is placed as a single contiguous block in one corner
+        (mirroring a real bounded protected area, e.g. Grimsö's reserve),
+        covering ~15% of the grid. The remaining area is split into
+        forest/logged based on forestry_intensity.
         """
         reserve_fraction = 0.15
+        total_cells = self.width * self.height
+        reserve_cells_target = int(total_cells * reserve_fraction)
+        reserve_side = int(round(reserve_cells_target ** 0.5))
+
         for x in range(self.width):
             for y in range(self.height):
-                r = self.random.random()
-                if r < reserve_fraction:
+                if x < reserve_side and y < reserve_side:
                     cell = "reserve"
-                elif r < reserve_fraction + (1 - reserve_fraction) * self.forestry_intensity:
-                    cell = "logged"
                 else:
-                    cell = "forest"
+                    r = self.random.random()
+                    cell = "logged" if r < self.forestry_intensity else "forest"
 
                 self.cell_type[(x, y)] = cell
                 self.forage[(x, y)] = 0.2 if cell == "logged" else 1.0
