@@ -1,5 +1,6 @@
 import mesa
 from mesa.space import MultiGrid
+from mesa.datacollection import DataCollector
 import numpy as np
 
 
@@ -23,6 +24,19 @@ class ForestModel(mesa.Model):
         self.forage = {}
 
         self._init_landscape()
+
+        self.datacollector = DataCollector(
+            model_reporters={
+                "mean_forage": lambda m: np.mean(list(m.forage.values())),
+                "reserve_dependency": lambda m: (
+                    sum(1 for a in m.agents if m.cell_type[a.pos] == "reserve") / len(m.agents)
+                    if len(m.agents) > 0 else 0
+                ),
+                "forest_count": lambda m: sum(1 for a in m.agents if m.cell_type[a.pos] == "forest"),
+                "logged_count": lambda m: sum(1 for a in m.agents if m.cell_type[a.pos] == "logged"),
+                "reserve_count": lambda m: sum(1 for a in m.agents if m.cell_type[a.pos] == "reserve"),
+            }
+        )
 
     def _init_landscape(self):
         """
@@ -54,6 +68,11 @@ class ForestModel(mesa.Model):
         for pos, cell in self.cell_type.items():
             growth_rate = 0.02 if cell == "logged" else 0.05
             self.forage[pos] = min(1.0, self.forage[pos] + growth_rate)
+
+    def step(self):
+        self.agents.shuffle_do("step")
+        self.step_forage_regrowth()
+        self.datacollector.collect(self)
 
 
 class Herbivore(mesa.Agent):
