@@ -32,9 +32,17 @@ This mirrors a well-documented real-world ecological effect: fragmentation can r
 
 ### Figures
 
-- `figure1_reserve_dependency_vs_intensity.png` — final reserve-dependency vs. forestry intensity, all replicates shown, with the mean trend line.
-- `figure2_reserve_dependency_over_time.png` — reserve-dependency over the full 150-step run for one representative replicate per intensity level, showing that higher intensity slows and dampens the settling process, not just its endpoint.
-- `figure3_landscape_snapshot.png` — spatial snapshot of the landscape and herbivore positions after 150 steps, for all three intensity levels side by side. Makes the fragmentation mechanism directly visible.
+![Final reserve-dependency versus forestry intensity](figure1_reserve_dependency_vs_intensity.png)
+
+*Final reserve-dependency vs. forestry intensity, all replicates shown, with the mean trend line.*
+
+![Reserve-dependency over time](figure2_reserve_dependency_over_time.png)
+
+*Reserve-dependency over the full 150-step run for one representative replicate per intensity level, showing that higher intensity slows and dampens the settling process, not just its endpoint.*
+
+![Landscape snapshot after 150 steps](figure3_landscape_snapshot.png)
+
+*Spatial snapshot of the landscape and herbivore positions after 150 steps, for all three intensity levels side by side. Makes the fragmentation mechanism directly visible.*
 
 ## How to run
 
